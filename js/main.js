@@ -94,3 +94,6 @@ canvas.addEventListener("click", function handler() {
     start();
   });
 });
+var download = function() {
+  document.write('<img src="'+canvas.toDataURL()+'"/>');
+}
