@@ -84,7 +84,6 @@ canvas.addEventListener("click", function handler() {
       screen.orientation.lock("landscape");
       screen.orientation.addEventListener("change", function ori() {
         screen.orientation.removeEventListener("change", ori);
-        manager.prevHeight = screen.height;
         setTimeout(start,1000);
       })
     }
