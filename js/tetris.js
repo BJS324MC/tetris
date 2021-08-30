@@ -145,7 +145,7 @@ class Board {
           ctx.fillRect(x + (i + this.pos[0]) * size, y + (j + this.pos[1]-2) * size, size, size);
       }
     ctx.globalAlpha=1;
-    this.drawInfo(ctx, x + (this.center ? width * size / 2 : 0), y + height * size + 50);
+    this.drawInfo(ctx, x + (this.center ? width * size / 2 : 0), y + (2+height) * size);
   }
   drawHold(ctx, x, y) {
     let size = this.size / 1.2;

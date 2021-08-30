@@ -42,7 +42,6 @@ class ButtonManager {
   constructor() {
     this.buttons = [];
     this.touches = [];
-    this.prevHeight=screen.height;
     this.init();
   }
   init() {
@@ -65,7 +64,7 @@ class ButtonManager {
     for (let button of this.buttons) {
       let hd = true;
       for (let touch of this.touches) {
-        if (button.hasCollided(touch[0], touch[1]+screen.height-this.prevHeight)) {
+        if (button.hasCollided(touch[0], touch[1])) {
           if ((!button.hold && button.holded) || button.delay>Date.now()) return false;
           button.touched();
           button.delay=Date.now()+button.holdDelay + ((button.delayed && !button.holded)?100:0);
