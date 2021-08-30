@@ -1,7 +1,8 @@
 const canvas = document.getElementById("game"),
   ctx = canvas.getContext('2d'),
-  game1 = new Board(10, 20, 22),
-  game2 = new Board(10, 20, 22),
+  rs=(innerWidth+innerHeight)/1998,
+  game1 = new Board(10, 20, 22*rs),
+  game2 = new Board(10, 20, 22*rs),
   mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
   .test(navigator.userAgent),
   ai = new AI(game1, { x: innerWidth / 4, y: 30 }),
@@ -16,7 +17,7 @@ let sources = ["background.jpg", "rotate.png", "rotatecounterclockwise.png", "ho
 imgs.forEach((a, i) => a.src = "images/" + sources[i]);
 
 var hasKeyboard = !mobile,
-  startDelay = 4000
+  startDelay = 4000;
 
 game1.target = game2;
 game2.target = game1;

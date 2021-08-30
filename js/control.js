@@ -84,7 +84,7 @@ class Button {
     this.image = image;
     this.x = x;
     this.y = y;
-    this.r = r;
+    this.r = r*rs;
     this.hold = hold;
     this.holded = false;
     this.holdDelay=holdDelay;
