@@ -84,7 +84,7 @@ canvas.addEventListener("click", function handler() {
       screen.orientation.addEventListener("change", function ori() {
         screen.orientation.removeEventListener("change", ori);
         manager.prevHeight = screen.height;
-        start();
+        setTimeout(start,1000);
       })
     }
     else start();
