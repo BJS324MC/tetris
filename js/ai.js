@@ -128,7 +128,11 @@ class AI {
     });
   }
   loadModel(name = "model") {
-    tf.loadLayersModel("http://localhost:7700/models/" + name + ".json")
+    
+    tf.loadLayersModel(
+      (location.href==="https://bjs324mc.github.io/tetris/"
+      ?"https://bjs324mc.github.io/tetris/models/"
+      :"http://localhost:7700/models/") + name + ".json")
       .then(model => {
         this.agent.model = model;
         this.agent.model.compile({ optimizer: 'adam', loss: 'meanSquaredError' });
