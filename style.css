@@ -4,8 +4,28 @@ body {
     background: #000000;
     position: fixed;
 }
-#chart{
-  position: absolute;
+canvas{
+  position: fixed;
   top:0;
   left:0;
+}
+#con{
+  color:white;
+  font-family: Roboto Mono;
+  padding:10px;
+  display: flex;
+  justify-content: center;
+  background: blue;
+}
+#con > div{
+  text-align: center;
+  transition: 0.2s;
+  border:2px solid #B5D0CD;
+  padding:20px;
+  margin:10px;
+  border-bottom:5px solid white;
+}
+#con > div:hover{
+  background-color: #A4A6BC;
+  transform: translate(0,-10%);
 }

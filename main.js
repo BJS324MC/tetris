@@ -1,22 +1,26 @@
-const canvas = document.getElementById("game"),
+const canvas = document.getElementById("game");
   ctx = canvas.getContext('2d'),
   rs=(innerWidth+innerHeight)/1998,
-  game1 = new Board(10, 20, 22*rs),
-  game2 = new Board(10, 20, 22*rs),
   mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-  .test(navigator.userAgent),
+    .test(navigator.userAgent);
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+
+var game1 = new Board(10, 20, 22*rs),
+  game2 = new Board(10, 20, 22*rs),
   ai = new AI(game1, { x: innerWidth / 4, y: 30 }),
   ai2 = new AI(game2, { x: innerWidth / 4 * 3, y: 30 }),
   manager = new ButtonManager();
+  
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
 let sources = ["background.jpg", "rotate.png", "rotatecounterclockwise.png", "hold.png", "left.png", "up.png", "right.png", "down.png"],
   imgs = sources.map(() => new Image()),
   ld = 0;
 imgs.forEach((a, i) => a.src = "images/" + sources[i]);
 
 var hasKeyboard = !mobile,
+  started=false,
   startDelay = 4000;
 
 game1.target = game2;
@@ -64,14 +68,15 @@ for (let i = 0; i < 100; i++) setTimeout(a => {
   ctx.fillStyle = "rgba(255,255,255," + ld + ")"
   ctx.fillText("Click to start", innerWidth / 2, innerHeight / 2);
 }, i * 10 + 500);
-
-function start() {
+function start(ios=false) {
+  if(started)return false;
+  started=true;
   startDelay += Date.now();
   ai.x = innerWidth / 4;
   ai2.x = innerWidth / 4 * 3;
   canvas.width = innerWidth;
   canvas.height = innerHeight;
-  addButtons(manager, game1);
+  addButtons(manager, game1,ios?screen.width:screen.height,ios?screen.height:screen.width);
   loop();
 }
 canvas.addEventListener("click", function handler() {
@@ -93,6 +98,7 @@ canvas.addEventListener("click", function handler() {
     canvas.removeEventListener("fullscreenerror", hand);
     start();
   });
+  setTimeout(a=>!document.fullscreenEnabled && start(true),1500);
 });
 var download = function() {
   document.write('<img src="'+canvas.toDataURL()+'"/>');

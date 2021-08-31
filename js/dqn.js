@@ -66,11 +66,23 @@ class DQNAgent {
     }
     return bestStates.slice(0,n);
   }
+  sample(arr, size) {
+    var shuffled = arr.slice(0),
+      i = arr.length,
+      temp, index;
+    while (i--) {
+      index = Math.floor((i + 1) * Math.random());
+      temp = shuffled[index];
+      shuffled[index] = shuffled[i];
+      shuffled[i] = temp;
+    }
+    return shuffled.slice(0, size);
+  }
   async train() {
     if (this.replayMemory.length < this.minReplaySize) 
       return;
     
-    let miniBatch = sample(this.replayMemory, this.miniBatchSize),
+    let miniBatch = this.sample(this.replayMemory, this.miniBatchSize),
         nextStates = miniBatch.map((dp) => { return dp.nextState }),
         nextQs = await this.model.predict(tf.tensor(nextStates)).array(),
         X = [],
@@ -94,16 +106,4 @@ class DQNAgent {
     this.epsilon = this.epsilon - this.epsilonDecay;
     this.episodeSteps = 0;
   }
-}
-function sample(arr, size) {
-  var shuffled = arr.slice(0),
-    i = arr.length,
-    temp, index;
-  while (i--) {
-    index = Math.floor((i + 1) * Math.random());
-    temp = shuffled[index];
-    shuffled[index] = shuffled[i];
-    shuffled[i] = temp;
-  }
-  return shuffled.slice(0, size);
 }

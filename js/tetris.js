@@ -18,10 +18,10 @@ class Board {
     this.width = width;
     this.height = height;
     this.size = size;
-    this.grid = Array.from({ length: height+2 }, b => Array.from({length:width},d=>0));
+    this.grid = Array.from({ length: height + 2 }, b => Array.from({ length: width }, d => 0));
     this.center = true;
     this.target = null;
-    this.garbageActive=false;
+    this.garbageActive = false;
     this.colors = {
       0: "black",
       1: "red",
@@ -118,34 +118,36 @@ class Board {
     }
     this.linesCleared = 0;
   }
-  draw(ctx, x = 0, y = 0) {
+  draw(ctx, x = 0, y = 0, pieces = true) {
     let { width, height, size, colors, pos } = this,
     piece = shape[this.piece][this.rotation],
       ghostPos = this.ghostDrop();
     for (let i = 0; i < width; i += 1)
       for (let j = 0; j < height; j += 1) {
-        let gj=this.grid[j+2];
-        if(!gj)continue;
+        let gj = this.grid[j + 2];
+        if (!gj) continue;
         ctx.fillStyle = colors[gj[i]];
         ctx.fillRect(x + i * size, y + j * size, size, size);
       }
     this.drawQueue(ctx, x + width * size + 50, y);
     this.drawHold(ctx, x - size * 4 - 50, y);
     if (this.gameOver) return;
-    ctx.fillStyle = "rgba(255,255,255,0.2)";
-    for (let i = 0; i < 4; i++)
-      for (let j = 0; j < 4; j++) {
-        if (piece & (0x8000 >> (i * 4 + j)))
-          ctx.fillRect(x + (i + ghostPos[0]) * size, y + (j + ghostPos[1]-2) * size, size, size);
-      }
-    ctx.fillStyle = colors[this.piece + 1];
-    for (let i = 0; i < 4; i++)
-      for (let j = 0; j < 4; j++) {
-        if (piece & (0x8000 >> (i * 4 + j)))
-          ctx.fillRect(x + (i + this.pos[0]) * size, y + (j + this.pos[1]-2) * size, size, size);
-      }
-    ctx.globalAlpha=1;
-    this.drawInfo(ctx, x + (this.center ? width * size / 2 : 0), y + (2+height) * size);
+    if (pieces) {
+      ctx.fillStyle = "rgba(255,255,255,0.2)";
+      for (let i = 0; i < 4; i++)
+        for (let j = 0; j < 4; j++) {
+          if (piece & (0x8000 >> (i * 4 + j)))
+            ctx.fillRect(x + (i + ghostPos[0]) * size, y + (j + ghostPos[1] - 2) * size, size, size);
+        }
+      ctx.fillStyle = colors[this.piece + 1];
+      for (let i = 0; i < 4; i++)
+        for (let j = 0; j < 4; j++) {
+          if (piece & (0x8000 >> (i * 4 + j)))
+            ctx.fillRect(x + (i + this.pos[0]) * size, y + (j + this.pos[1] - 2) * size, size, size);
+        }
+    }
+    ctx.globalAlpha = 1;
+    this.drawInfo(ctx, x + (this.center ? width * size / 2 : 0), y + (2 + height) * size);
   }
   drawHold(ctx, x, y) {
     let size = this.size / 1.2;
@@ -217,7 +219,7 @@ class Board {
       this.comboGarbage[Math.max(0, this.combo)],
       empty = Math.floor(Math.random() * game.width);
     for (let i = 0; i < total; i++) {
-      let shifted=game.grid.shift();
+      let shifted = game.grid.shift();
       let line = Array.from({ length: game.width }, a => 8);
       line.splice(empty, 1, 0);
       game.grid.push(line);
@@ -225,9 +227,10 @@ class Board {
         game.gameOver = true;
         break;
       }
-      if(!game.isLegal()){
+      if (!game.isLegal()) {
         game.pos[1]--;
-        if(!game.isLegal())game.gameOver=true;
+        game.delay+=game.lockDelay;
+        if (!game.isLegal()) game.gameOver = true;
       }
     }
   }
@@ -249,12 +252,15 @@ class Board {
     if (!this.fillerQueue.length) this.refillQueue();
   }
   restart() {
+    this.hold=null;
     this.linesCleared = 0;
     this.gameOver = false;
-    this.grid = Array.from({ length: this.height+2 }, a => Array.from({length:this.width},a=>0));
+    this.grid = Array.from({ length: this.height + 2 }, a => Array.from({ length: this.width }, a => 0));
     this.pos = [Math.floor(this.width / 2), 0];
     this.score = 0;
     this.backToBack = false;
+    this.generateQueue();
+    this.refillQueue();
   }
   iteratePiece(p = this.piece, r = this.rotation, f = () => 0) {
     let piece = shape[p][r];
@@ -273,7 +279,7 @@ class Board {
       },
       isTSpin = this.tSpin();
     this.iteratePiece(this.piece, this.rotation, (i, j) => this.grid[j + this.pos[1]][i + this.pos[0]] = this.piece + 1);
-    this.pos = [Math.floor(this.width/2)-1,0];
+    this.pos = [Math.floor(this.width / 2) - 1, 0];
     this.shiftPiece();
     let lines = this.clearLines();
     if (isTSpin && lines > 0) {
@@ -369,8 +375,8 @@ class Board {
     else this.infinity();
     return true;
   }
-  toppedOut(){
-    return this.grid[0].some(a=>a!==0) || this.grid[1].some(a=>a!==0);
+  toppedOut() {
+    return this.grid[0].some(a => a !== 0) || this.grid[1].some(a => a !== 0);
   }
   isLegal(grid = this.grid, pos = this.pos, piec = this.piece, rotation = this.rotation) {
     let piece = shape[piec][rotation];
@@ -391,7 +397,7 @@ class Board {
       this.pos[1]--;
       if (freeze) this.lockPiece();
       return false;
-    }else this.resetDelay();
+    } else this.resetDelay();
     return true;
   }
   ghostDrop() {
@@ -404,7 +410,7 @@ class Board {
     this.pos = ogPos;
     return ghostPos;
   }
-  tSpin(pos = this.pos,rot=this.rotation) {
+  tSpin(pos = this.pos, rot = this.rotation) {
     if (this.piece !== 4) return false;
     for (let move of [[0, -1], [1, 0], [-1, 0]]) {
       if (this.isLegal(this.grid, [pos[0] + move[0], pos[1] + move[1]], 4, rot))
@@ -456,10 +462,10 @@ class Board {
     totalHeight = heights.reduce((t, a) => t + a);
     heights.forEach((a, i) => i + 1 === heights.length ? 0 : bumps.push(Math.abs(a - heights[i + 1])))
     bumpiness = bumps.reduce((t, a) => t + a);
-    if(this.garbageActive)
-      garbage=(this.tSpin(pos,rot) ? this.tSpinGarbage[lines] : this.lineGarbage[lines]) +
-    this.comboGarbage[Math.max(0, this.combo)];
-    return [lines * (this.tSpin(pos, rot) ? 2 : lines<3 && totalHeight<50 ? -1 : 1), totalHeight, holes, bumpiness].concat(this.garbageActive?[garbage]:[]);
+    if (this.garbageActive)
+      garbage = (this.tSpin(pos, rot) ? this.tSpinGarbage[lines] : this.lineGarbage[lines]) +
+      this.comboGarbage[Math.max(0, this.combo)];
+    return [lines * (this.tSpin(pos, rot) ? 2 : lines < 3 && totalHeight < 50 ? -1 : 1), totalHeight, holes, bumpiness].concat(this.garbageActive ? [garbage] : []);
   }
   possibleStatesAndActions(hold = false, move = true) {
     let finals = this.getPossibleMoves(),
@@ -479,7 +485,7 @@ class Board {
       finals2.forEach(a => {
         let state = this.stateInfo([a.x, a.y], a.rot);
         states.push(state);
-        actions.push(move ? [() => this.holdPiece(), ...a.moves] : [a.x, a.y, a.rot, ()=>this.holdPiece()]);
+        actions.push(move ? [() => this.holdPiece(), ...a.moves] : [a.x, a.y, a.rot, () => this.holdPiece()]);
       });
       this.piece = p;
       this.pos = pd;
@@ -496,7 +502,8 @@ class Board {
     };
     let start_node = new Node(this.pos[0], this.pos[1], this.rotation),
       frontier = [start_node],
-      visited = {[start_node.hash]: true },
+      visited = {
+        [start_node.hash]: true },
       final_nodes = [];
     while (frontier.length > 0) {
       let n = frontier.pop();
@@ -536,7 +543,7 @@ class Node {
     this.final = false;
     this.hash = x + "," + y + "," + rot;
   }
-  key(){
-    return this.x+","+this.y+","+this.rot;
+  key() {
+    return this.x + "," + this.y + "," + this.rot;
   }
 }

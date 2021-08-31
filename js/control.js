@@ -94,7 +94,7 @@ class Button {
     return (this.x - x) ** 2 + (this.y - y) ** 2 <= this.r ** 2
   }
   draw(ctx) {
-    ctx.fillStyle = "rgba(155,155,155,0.3)";
+    ctx.fillStyle = "rgba(155,155,155,"+(this.holded?0.6:0.3)+")";
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
     ctx.fill();
@@ -104,15 +104,15 @@ class Button {
   }
 }
 
-function addButtons(manager, game) {
-  let off = screen.width * 0.05;
+function addButtons(manager, game,w=screen.width,h=screen.height) {
+  let off = w * 0.05;
   manager.add(
-    new Button(() => game.move(false), imgs[4], screen.width * 0.2 - off, screen.height * 0.7,40,50,true,true),
-    new Button(() => game.move(true), imgs[6], screen.width * 0.2 + off, screen.height * 0.7,40,50,true,true),
-    new Button(() => game.drop(false), imgs[7], screen.width * 0.2, screen.height * 0.7 + off,40,22),
-    new Button(() => game.hardDrop(), imgs[5], screen.width * 0.2, screen.height * 0.7 - off, 40,90,false),
-    new Button(() => game.rotate(false),imgs[1],screen.width*0.8+off,screen.height*0.7,40,90,false),
-    new Button(() => game.rotate(true),imgs[2],screen.width*0.8,screen.height*0.7+off,40,90,false),
-    new Button(() => game.holdPiece(),imgs[3],screen.width*0.8+off,screen.height*0.7-off*2,40,90,false)
+    new Button(() => game.move(false), imgs[4], w * 0.2 - off, h * 0.7,40,50,true,true),
+    new Button(() => game.move(true), imgs[6], w * 0.2 + off, h * 0.7,40,50,true,true),
+    new Button(() => game.drop(false), imgs[7], w * 0.2, h * 0.7 + off,40,22),
+    new Button(() => game.hardDrop(), imgs[5], w * 0.2, h * 0.7 - off, 40,90,false),
+    new Button(() => game.rotate(false),imgs[1],w*0.8+off,h*0.7,40,90,false),
+    new Button(() => game.rotate(true),imgs[2],w*0.8,h*0.7+off,40,90,false),
+    new Button(() => game.holdPiece(),imgs[3],w*0.8+off,h*0.7-off*2,40,90,false)
   );
 }

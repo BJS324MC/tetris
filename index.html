@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -15,13 +16,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap" rel="stylesheet">
   <script src="js/tf.min.js"></script>
 </head>
+
 <body>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.8.0/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDyXjIifqs8oo5QR1clJ21ABnBFGwdynfw",
+      authDomain: "scoreboard-8890f.firebaseapp.com",
+      databaseURL: "https://scoreboard-8890f.firebaseio.com",
+      projectId: "scoreboard-8890f",
+      storageBucket: "scoreboard-8890f.appspot.com",
+      messagingSenderId: "853805264595",
+      appId: "1:853805264595:web:f27cb7347ab81f05c4ae26",
+      measurementId: "G-RCCBEEXHR8"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <canvas id="game"></canvas>
-  <canvas id="chart" width="100" height="100"></canvas>
-  <script src="js/qlearning.js"></script>
-  <script src="js/tetris.js"></script>
+  <!--<span id="con">
+    <div>Play</div>
+    <div>Options</div>
+    <div>Quit</div><span/>-->
   <script src="js/ai.js"></script>
   <script src="js/control.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/dqn.js"></script>
+  <script src="js/tetris.js"></script>
+  <script src="main.js"></script>
 </body>
+
 </html>

@@ -164,7 +164,7 @@ class AI {
     const { game, x, y } = this,
     scoreX = x - game.width / 2 * game.size - 4 * game.size;
     ctx.globalAlpha=0.5;
-    game.draw(ctx, x - game.width * game.size / 2, y);
+    game.draw(ctx, x - game.width * game.size / 2, y,startDelay-Date.now()<0);
     ctx.globalAlpha=1;
     ctx.fillStyle = "white"
     ctx.fillText("Loses:" + this.epoches, x - 4 * game.size, (game.height+4) * game.size+y);
