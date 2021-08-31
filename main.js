@@ -76,9 +76,13 @@ function start(ios=false) {
   ai2.x = innerWidth / 4 * 3;
   canvas.width = innerWidth;
   canvas.height = innerHeight;
-  addButtons(manager, game1,ios?screen.width:screen.height,ios?screen.height:screen.width);
+  addButtons(manager, game1,ios ? screen.height:screen.width,ios?screen.width:screen.height);
   loop();
 }
+canvas.addEventListener("touchstart",function hd()  {
+  canvas.removeEventListener("touchstart",hd);
+  setTimeout(a=>!document.fullscreenEnabled && start(true),1000);
+});
 canvas.addEventListener("click", function handler() {
   canvas.removeEventListener("click", handler);
   canvas.requestFullscreen().catch(err => console.log(err));
@@ -98,7 +102,6 @@ canvas.addEventListener("click", function handler() {
     canvas.removeEventListener("fullscreenerror", hand);
     start();
   });
-  setTimeout(a=>!document.fullscreenEnabled && start(true),1500);
 });
 var download = function() {
   document.write('<img src="'+canvas.toDataURL()+'"/>');

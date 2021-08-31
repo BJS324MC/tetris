@@ -105,14 +105,14 @@ class Button {
 }
 
 function addButtons(manager, game,w=screen.width,h=screen.height) {
-  let off = w * 0.05;
+  let off = w * 0.06,size=50;
   manager.add(
-    new Button(() => game.move(false), imgs[4], w * 0.2 - off, h * 0.7,40,50,true,true),
-    new Button(() => game.move(true), imgs[6], w * 0.2 + off, h * 0.7,40,50,true,true),
-    new Button(() => game.drop(false), imgs[7], w * 0.2, h * 0.7 + off,40,22),
-    new Button(() => game.hardDrop(), imgs[5], w * 0.2, h * 0.7 - off, 40,90,false),
-    new Button(() => game.rotate(false),imgs[1],w*0.8+off,h*0.7,40,90,false),
-    new Button(() => game.rotate(true),imgs[2],w*0.8,h*0.7+off,40,90,false),
-    new Button(() => game.holdPiece(),imgs[3],w*0.8+off,h*0.7-off*2,40,90,false)
+    new Button(() => game.move(false), imgs[4], w * 0.2 - off, h * 0.7,size,50,true,true),
+    new Button(() => game.move(true), imgs[6], w * 0.2 + off, h * 0.7,size,50,true,true),
+    new Button(() => game.drop(false), imgs[7], w * 0.2, h * 0.7 + off,size,22),
+    new Button(() => game.hardDrop(), imgs[5], w * 0.2, h * 0.7 - off, size,90,false),
+    new Button(() => game.rotate(false),imgs[1],w*0.8+off,h*0.7,size,90,false),
+    new Button(() => game.rotate(true),imgs[2],w*0.8,h*0.7+off,size,90,false),
+    new Button(() => game.holdPiece(),imgs[3],w*0.8+off,h*0.7-off*2,size,90,false)
   );
 }
